@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subject Marks Tracker</title>
+    <link rel="stylesheet" href="perf1.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo-container">
+                <img src="logo2.png" alt="Logo" class="logo">
+                <div class="editor">SPMS</div>
+            </div>
+            <ul>
+                <li><a href="perf1.html">Home <span class="icon">🏠</span></a></li>
+                <li><a href="analysis.html">Analysis <span class="icon">📊</span></a></li>
+                <li><a href="#logout">Logout <span class="icon">🚪</span></a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="button-group">
+            <button id="addStudent">Add Student</button>
+            <button id="deleteStudent">Delete Student</button>
+        </div>
+
+        <section id="marksTableContainer">
+            <h2>Marks Table</h2>
+            <div class="search-bar">
+                <button id="searchMarks">Search Marks</button>
+            </div>
+            <table id="marksTable" class="marks-table">
+                <thead>
+                    <tr>
+                        <th>Roll No</th>
+                        <th>Course Code</th>
+                        <th>Minor-1</th>
+                        <th>Mid</th>
+                        <th>Minor-2</th>
+                        <th>End Sem</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="marksTbody"></tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="7"><button id="addMarksRow">Add Marks</button></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </section>
+
+        <section id="gpaTableContainer">
+            <h2>SGPA & CGPA Tracker</h2>
+            <div class="search-bar">
+                <button id="searchGpa">Search SGPA/CGPA</button>
+            </div>
+            <table id="gpaTable" class="gpa-table">
+                <thead>
+                    <tr>
+                        <th>Roll No</th>
+                        <th>Name</th>
+                        <th>Department</th>
+                        <th>Academic Year</th>
+                        <th>Semester</th>
+                        <th>SGPA</th>
+                        <th>CGPA</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="gpaTbody"></tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="8"><button id="addGpaRow">Add SGPA/CGPA</button></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </section>
+
+        <section id="courseDetailsContainer">
+            <h2>Student Details</h2>
+            <div class="search-bar">
+                <button id="searchCourse">Search Student Details</button>
+            </div>
+            <table id="courseTable" class="course-table">
+                <thead>
+                    <tr>
+                        <th>Roll No</th>
+                        <th>Name</th>
+                        <th>Department</th>
+                        <th>Academic Year</th>
+                        <th>Semester</th>
+                        <th>Course Name</th>
+                        <th>Course Code</th>
+                        <th>Credits</th>
+                        <th>Grade</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="courseTbody"></tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="10"><button id="addCourseRow">Add Student Details</button></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </section>
+
+        <section id="coursesContainer">
+            <h2>Courses</h2>
+            <div class="search-bar">
+                <input type="text" id="courseCodeSearch" placeholder="Enter Course Code to search...">
+                <button id="searchCourses">Search</button>
+            </div>
+            <table id="coursesTable" class="courses-table">
+                <thead>
+                    <tr>
+                        <th>Course Code</th>
+                        <th>Course Name</th>
+                        <th>Credits</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="coursesTbody"></tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="4"><button id="addCoursesRow">Add Course</button></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </section>
+
+        <section id="gradePointsContainer">
+            <h2>Grade Points</h2>
+            <table id="gradePointsTable" class="grade-points-table">
+                <thead>
+                    <tr>
+                        <th>Grade</th>
+                        <th>Points</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="gradePointsTbody"></tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="3"><button id="addGradePointsRow">Add Grade</button></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </section>
+
+        <section id="chartsContainer">
+            <div id="passPercentageContainer">
+                <h2>Department Pass Percentage</h2>
+                <div>
+                    <label for="departmentSelect">Select Department: </label>
+                    <select id="departmentSelect">
+                        <option value="">-- Select a Department --</option>
+                    </select>
+                </div>
+                <canvas id="passPieChart" width="400" height="400"></canvas>
+            </div>
+
+            <div id="cgpaStatsContainer">
+                <h2>Department CGPA Variation</h2>
+                <div>
+                    <label for="cgpaOptionSelect">Select Option: </label>
+                    <select id="cgpaOptionSelect">
+                        <option value="avg">Average CGPA</option>
+                        <option value="min">Minimum CGPA</option>
+                        <option value="max">Maximum CGPA</option>
+                    </select>
+                </div>
+                <canvas id="cgpaBarChart" width="600" height="400"></canvas>
+            </div>
+        </section>
+    </main>
+
+    <script src="perf.js"></script>
+</body>
+</html>
