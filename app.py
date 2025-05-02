@@ -170,6 +170,58 @@ with app.app_context():
                     name=student['name'],
                     department=student['department']
                 ))
+            
+            # Commit students so they exist for the next steps
+            db.session.commit()
+            
+            # Add some sample student details and grades
+            student_details = [
+                # Student 101 - semester 1
+                {'roll_no': '101', 'course_code': 'CS101', 'semester': 1, 'academic_year': '2023-2024', 'grade': 'A'},
+                {'roll_no': '101', 'course_code': 'MA101', 'semester': 1, 'academic_year': '2023-2024', 'grade': 'A'},
+                {'roll_no': '101', 'course_code': 'PH101', 'semester': 1, 'academic_year': '2023-2024', 'grade': 'B'},
+                
+                # Student 101 - semester 2
+                {'roll_no': '101', 'course_code': 'CS102', 'semester': 2, 'academic_year': '2023-2024', 'grade': 'A'},
+                {'roll_no': '101', 'course_code': 'MA101', 'semester': 2, 'academic_year': '2023-2024', 'grade': 'EX'},
+                
+                # Student 101 - semester 3
+                {'roll_no': '101', 'course_code': 'CS101', 'semester': 3, 'academic_year': '2024-2025', 'grade': 'EX'},
+                {'roll_no': '101', 'course_code': 'CS102', 'semester': 3, 'academic_year': '2024-2025', 'grade': 'A'},
+                
+                # Student 102 - semester 1
+                {'roll_no': '102', 'course_code': 'CS101', 'semester': 1, 'academic_year': '2023-2024', 'grade': 'B'},
+                {'roll_no': '102', 'course_code': 'MA101', 'semester': 1, 'academic_year': '2023-2024', 'grade': 'C'},
+                
+                # Student 201 - semester 1
+                {'roll_no': '201', 'course_code': 'PH101', 'semester': 1, 'academic_year': '2023-2024', 'grade': 'A'},
+                {'roll_no': '201', 'course_code': 'MA101', 'semester': 1, 'academic_year': '2023-2024', 'grade': 'B'},
+            ]
+            
+            for detail in student_details:
+                db.session.add(StudentDetail(
+                    roll_no=detail['roll_no'],
+                    course_code=detail['course_code'],
+                    semester=detail['semester'],
+                    academic_year=detail['academic_year'],
+                    grade=detail['grade']
+                ))
+            
+            # Add SGPA/CGPA tracker entries
+            sgpa_entries = [
+                {'roll_no': '101', 'semester': 1, 'academic_year': '2023-2024'},
+                {'roll_no': '101', 'semester': 2, 'academic_year': '2023-2024'},
+                {'roll_no': '101', 'semester': 3, 'academic_year': '2024-2025'},
+                {'roll_no': '102', 'semester': 1, 'academic_year': '2023-2024'},
+                {'roll_no': '201', 'semester': 1, 'academic_year': '2023-2024'},
+            ]
+            
+            for entry in sgpa_entries:
+                db.session.add(SgpaCgpaTracker(
+                    roll_no=entry['roll_no'],
+                    semester=entry['semester'],
+                    academic_year=entry['academic_year']
+                ))
         
         # Commit all changes
         db.session.commit()

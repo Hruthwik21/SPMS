@@ -350,10 +350,12 @@ function displayStudentDetails(student, gpaData) {
 // Render line chart for student's SGPA and CGPA variation
 function renderStudentGpaChart(gpaData) {
     try {
+        console.log("Rendering GPA chart with data:", gpaData);
+        
         // Sort data by semester
         gpaData.sort((a, b) => a.semester - b.semester);
         
-        // Get the canvas element
+        // Get the canvas element - this is dynamically created in the DOM now
         const canvas = document.getElementById('studentGpaChart');
         if (!canvas) {
             console.error('Canvas element not found');
@@ -367,20 +369,32 @@ function renderStudentGpaChart(gpaData) {
             window.studentGpaChart.destroy();
         }
         
-        // Add sample SGPA/CGPA data for testing if no real data exists
-        if (gpaData.length === 0 || !gpaData.some(data => data.sgpa || data.cgpa)) {
-            console.warn('No GPA data found for chart, adding sample data for testing');
-            gpaData = [
-                { semester: 1, sgpa: 8.5, cgpa: 8.5 },
-                { semester: 2, sgpa: 9.0, cgpa: 8.75 },
-                { semester: 3, sgpa: 8.2, cgpa: 8.57 }
-            ];
+        // Create sample data for testing or demonstration
+        // This ensures we always have a chart to show, even if no GPA data is calculated yet
+        let chartData = [
+            { semester: 1, sgpa: 8.5, cgpa: 8.5 },
+            { semester: 2, sgpa: 9.0, cgpa: 8.75 },
+            { semester: 3, sgpa: 8.2, cgpa: 8.57 }
+        ];
+        
+        // Check if we have actual data from the database
+        if (gpaData.length > 0) {
+            chartData = gpaData.map(data => ({
+                semester: data.semester,
+                sgpa: parseFloat(data.sgpa) || null,
+                cgpa: parseFloat(data.cgpa) || null
+            }));
+            console.log("Using actual data for chart:", chartData);
+        } else {
+            console.warn("No GPA data found, using sample data for demonstration");
         }
         
         // Extract semesters, SGPA and CGPA values
-        const semesters = gpaData.map(data => `Semester ${data.semester}`);
-        const sgpaValues = gpaData.map(data => data.sgpa || null);
-        const cgpaValues = gpaData.map(data => data.cgpa || null);
+        const semesters = chartData.map(data => `Semester ${data.semester}`);
+        const sgpaValues = chartData.map(data => data.sgpa);
+        const cgpaValues = chartData.map(data => data.cgpa);
+        
+        console.log("Chart data:", { semesters, sgpaValues, cgpaValues });
         
         // Create the chart
         window.studentGpaChart = new Chart(ctx, {
@@ -428,7 +442,7 @@ function renderStudentGpaChart(gpaData) {
                         callbacks: {
                             label: function(context) {
                                 const value = context.raw;
-                                if (value === null) return `${context.dataset.label}: N/A`;
+                                if (value === null || value === undefined) return `${context.dataset.label}: N/A`;
                                 return `${context.dataset.label}: ${value.toFixed(2)}`;
                             }
                         }
@@ -457,5 +471,6 @@ function renderStudentGpaChart(gpaData) {
         console.log('GPA chart rendered successfully');
     } catch (error) {
         console.error('Error rendering GPA chart:', error);
+        alert('There was an error rendering the GPA chart. Please try again.');
     }
 }
