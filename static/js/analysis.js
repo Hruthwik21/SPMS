@@ -352,9 +352,6 @@ function renderStudentGpaChart(gpaData) {
     try {
         console.log("Rendering GPA chart with data:", gpaData);
         
-        // Sort data by semester
-        gpaData.sort((a, b) => a.semester - b.semester);
-        
         // Get the canvas element - this is dynamically created in the DOM now
         const canvas = document.getElementById('studentGpaChart');
         if (!canvas) {
@@ -369,32 +366,31 @@ function renderStudentGpaChart(gpaData) {
             window.studentGpaChart.destroy();
         }
         
-        // Create sample data for testing or demonstration
-        // This ensures we always have a chart to show, even if no GPA data is calculated yet
-        let chartData = [
-            { semester: 1, sgpa: 8.5, cgpa: 8.5 },
-            { semester: 2, sgpa: 9.0, cgpa: 8.75 },
-            { semester: 3, sgpa: 8.2, cgpa: 8.57 }
-        ];
+        // Create data array for the chart
+        const chartData = [];
         
-        // Check if we have actual data from the database
-        if (gpaData.length > 0) {
-            chartData = gpaData.map(data => ({
-                semester: data.semester,
-                sgpa: parseFloat(data.sgpa) || null,
-                cgpa: parseFloat(data.cgpa) || null
-            }));
-            console.log("Using actual data for chart:", chartData);
-        } else {
-            console.warn("No GPA data found, using sample data for demonstration");
+        // Process the data for the chart
+        for (let i = 0; i < gpaData.length; i++) {
+            chartData.push({
+                semester: parseInt(gpaData[i].semester),
+                sgpa: typeof gpaData[i].sgpa === 'number' ? gpaData[i].sgpa : 
+                       typeof gpaData[i].sgpa === 'string' ? parseFloat(gpaData[i].sgpa) : null,
+                cgpa: typeof gpaData[i].cgpa === 'number' ? gpaData[i].cgpa : 
+                      typeof gpaData[i].cgpa === 'string' ? parseFloat(gpaData[i].cgpa) : null
+            });
         }
         
+        // Sort by semester
+        chartData.sort((a, b) => a.semester - b.semester);
+        
+        console.log("Processed chart data:", chartData);
+        
         // Extract semesters, SGPA and CGPA values
-        const semesters = chartData.map(data => `Semester ${data.semester}`);
+        const semesters = chartData.map(data => `Sem ${data.semester}`);
         const sgpaValues = chartData.map(data => data.sgpa);
         const cgpaValues = chartData.map(data => data.cgpa);
         
-        console.log("Chart data:", { semesters, sgpaValues, cgpaValues });
+        console.log("Chart series data:", { semesters, sgpaValues, cgpaValues });
         
         // Create the chart
         window.studentGpaChart = new Chart(ctx, {
@@ -471,6 +467,7 @@ function renderStudentGpaChart(gpaData) {
         console.log('GPA chart rendered successfully');
     } catch (error) {
         console.error('Error rendering GPA chart:', error);
-        alert('There was an error rendering the GPA chart. Please try again.');
+        // Show the error details in the console
+        console.error('Error details:', error.message, error.stack);
     }
 }
