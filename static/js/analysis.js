@@ -413,11 +413,6 @@ function renderStudentGpaChart(gpaData) {
         
         const ctx = canvas.getContext('2d');
         
-        // Clear previous chart if it exists
-        if (window.studentGpaChart) {
-            window.studentGpaChart.destroy();
-        }
-        
         // Create data array for the chart
         const chartData = [];
         
@@ -444,79 +439,89 @@ function renderStudentGpaChart(gpaData) {
         
         console.log("Chart series data:", { semesters, sgpaValues, cgpaValues });
         
-        // Create the chart
-        window.studentGpaChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: semesters,
-                datasets: [
-                    {
-                        label: 'SGPA',
-                        data: sgpaValues,
-                        borderColor: '#3b82f6',
-                        backgroundColor: 'rgba(59, 130, 246, 0.2)',
-                        pointBackgroundColor: '#3b82f6',
-                        pointRadius: 5,
-                        pointHoverRadius: 7,
-                        fill: false,
-                        tension: 0.1
-                    },
-                    {
-                        label: 'CGPA',
-                        data: cgpaValues,
-                        borderColor: '#10b981',
-                        backgroundColor: 'rgba(16, 185, 129, 0.2)',
-                        pointBackgroundColor: '#10b981',
-                        pointRadius: 5,
-                        pointHoverRadius: 7,
-                        fill: false,
-                        tension: 0.1
-                    }
-                ]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    title: {
-                        display: true,
-                        text: 'SGPA & CGPA Variation Over Semesters',
-                        font: {
-                            size: 16
+        // Create a simple DIV to display values if Chart creation fails
+        let chartDisplay = document.createElement('div');
+        chartDisplay.innerHTML = '<p>Chart data is ready but not displayed due to technical issues.</p>';
+        
+        try {
+            // Create the chart using a new Chart instance
+            const chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: semesters,
+                    datasets: [
+                        {
+                            label: 'SGPA',
+                            data: sgpaValues,
+                            borderColor: '#3b82f6',
+                            backgroundColor: 'rgba(59, 130, 246, 0.2)',
+                            pointBackgroundColor: '#3b82f6',
+                            pointRadius: 5,
+                            pointHoverRadius: 7,
+                            fill: false,
+                            tension: 0.1
+                        },
+                        {
+                            label: 'CGPA',
+                            data: cgpaValues,
+                            borderColor: '#10b981',
+                            backgroundColor: 'rgba(16, 185, 129, 0.2)',
+                            pointBackgroundColor: '#10b981',
+                            pointRadius: 5,
+                            pointHoverRadius: 7,
+                            fill: false,
+                            tension: 0.1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'SGPA & CGPA Variation Over Semesters',
+                            font: {
+                                size: 16
+                            }
+                        },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                            callbacks: {
+                                label: function(context) {
+                                    const value = context.raw;
+                                    if (value === null || value === undefined) return `${context.dataset.label}: N/A`;
+                                    return `${context.dataset.label}: ${value.toFixed(2)}`;
+                                }
+                            }
                         }
                     },
-                    tooltip: {
-                        mode: 'index',
-                        intersect: false,
-                        callbacks: {
-                            label: function(context) {
-                                const value = context.raw;
-                                if (value === null || value === undefined) return `${context.dataset.label}: N/A`;
-                                return `${context.dataset.label}: ${value.toFixed(2)}`;
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            min: 0,
+                            max: 10,
+                            title: {
+                                display: true,
+                                text: 'GPA Value'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Semester'
                             }
                         }
                     }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: false,
-                        min: 0,
-                        max: 10,
-                        title: {
-                            display: true,
-                            text: 'GPA Value'
-                        }
-                    },
-                    x: {
-                        title: {
-                            display: true,
-                            text: 'Semester'
-                        }
-                    }
                 }
-            }
-        });
-        
-        console.log('GPA chart rendered successfully');
+            });
+            
+            console.log('GPA chart rendered successfully');
+        } catch (chartError) {
+            console.error('Error creating Chart instance:', chartError);
+            canvas.style.display = 'none';
+            canvas.parentNode.appendChild(chartDisplay);
+        }
     } catch (error) {
         console.error('Error rendering GPA chart:', error);
         // Show the error details in the console
