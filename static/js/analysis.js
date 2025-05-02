@@ -378,11 +378,11 @@ function displayStudentDetails(student, gpaData) {
         
         html += '</tbody></table>';
         
-        // Add chart container to the studentForm
+        // Add chart container to the studentForm with increased size
         html += `
-            <div id="studentGpaChartContainer" style="margin-top: 2rem;">
+            <div id="studentGpaChartContainer" style="margin-top: 2rem; width: 100%; height: 500px;">
                 <h3>GPA Variation Over Semesters</h3>
-                <canvas id="studentGpaChart" width="800" height="400"></canvas>
+                <canvas id="studentGpaChart" width="100%" height="500"></canvas>
             </div>
         `;
     }
@@ -456,10 +456,11 @@ function renderStudentGpaChart(gpaData) {
                             borderColor: '#3b82f6',
                             backgroundColor: 'rgba(59, 130, 246, 0.2)',
                             pointBackgroundColor: '#3b82f6',
-                            pointRadius: 5,
-                            pointHoverRadius: 7,
-                            fill: false,
-                            tension: 0.1
+                            borderWidth: 3,
+                            pointRadius: 8,
+                            pointHoverRadius: 10,
+                            fill: true,
+                            tension: 0.2
                         },
                         {
                             label: 'CGPA',
@@ -467,26 +468,51 @@ function renderStudentGpaChart(gpaData) {
                             borderColor: '#10b981',
                             backgroundColor: 'rgba(16, 185, 129, 0.2)',
                             pointBackgroundColor: '#10b981',
-                            pointRadius: 5,
-                            pointHoverRadius: 7,
-                            fill: false,
-                            tension: 0.1
+                            borderWidth: 3,
+                            pointRadius: 8,
+                            pointHoverRadius: 10,
+                            fill: true,
+                            tension: 0.2
                         }
                     ]
                 },
                 options: {
                     responsive: true,
+                    maintainAspectRatio: false,
+                    devicePixelRatio: 2,
                     plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                font: {
+                                    size: 16,
+                                    weight: 'bold'
+                                },
+                                padding: 20
+                            }
+                        },
                         title: {
                             display: true,
                             text: 'SGPA & CGPA Variation Over Semesters',
                             font: {
-                                size: 16
+                                size: 20,
+                                weight: 'bold'
+                            },
+                            padding: {
+                                top: 10,
+                                bottom: 30
                             }
                         },
                         tooltip: {
                             mode: 'index',
                             intersect: false,
+                            titleFont: {
+                                size: 16
+                            },
+                            bodyFont: {
+                                size: 14
+                            },
+                            padding: 10,
                             callbacks: {
                                 label: function(context) {
                                     const value = context.raw;
@@ -501,15 +527,49 @@ function renderStudentGpaChart(gpaData) {
                             beginAtZero: false,
                             min: 0,
                             max: 10,
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            ticks: {
+                                font: {
+                                    size: 14
+                                },
+                                padding: 10
+                            },
                             title: {
                                 display: true,
-                                text: 'GPA Value'
+                                text: 'GPA Value',
+                                font: {
+                                    size: 16,
+                                    weight: 'bold'
+                                },
+                                padding: {
+                                    top: 0,
+                                    bottom: 10
+                                }
                             }
                         },
                         x: {
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            ticks: {
+                                font: {
+                                    size: 14
+                                },
+                                padding: 10
+                            },
                             title: {
                                 display: true,
-                                text: 'Semester'
+                                text: 'Semester',
+                                font: {
+                                    size: 16,
+                                    weight: 'bold'
+                                },
+                                padding: {
+                                    top: 10,
+                                    bottom: 0
+                                }
                             }
                         }
                     }
