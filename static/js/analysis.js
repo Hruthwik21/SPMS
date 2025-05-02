@@ -275,9 +275,10 @@ function searchStudent() {
     displayStudentDetails(student, studentGpaData);
 }
 
-// Display student details
+// Display student details and GPA chart
 function displayStudentDetails(student, gpaData) {
     const studentForm = document.getElementById('studentForm');
+    const chartContainer = document.getElementById('studentGpaChartContainer');
     
     let html = `
         <div>
@@ -292,6 +293,7 @@ function displayStudentDetails(student, gpaData) {
     
     if (gpaData.length === 0) {
         html += '<p>No GPA data available for this student</p>';
+        chartContainer.style.display = 'none';
     } else {
         html += `
             <table>
@@ -321,9 +323,107 @@ function displayStudentDetails(student, gpaData) {
         });
         
         html += '</tbody></table>';
+        
+        // Make chart container visible
+        chartContainer.style.display = 'block';
+        
+        // Create the line chart for SGPA and CGPA
+        renderStudentGpaChart(gpaData);
     }
     
     html += '</div>';
     
     studentForm.innerHTML = html;
+}
+
+// Render line chart for student's SGPA and CGPA variation
+function renderStudentGpaChart(gpaData) {
+    // Sort data by semester
+    gpaData.sort((a, b) => a.semester - b.semester);
+    
+    // Get the canvas element
+    const canvas = document.getElementById('studentGpaChart');
+    const ctx = canvas.getContext('2d');
+    
+    // Clear previous chart if it exists
+    if (window.studentGpaChart) {
+        window.studentGpaChart.destroy();
+    }
+    
+    // Extract semesters, SGPA and CGPA values
+    const semesters = gpaData.map(data => `Semester ${data.semester}`);
+    const sgpaValues = gpaData.map(data => data.sgpa || null);
+    const cgpaValues = gpaData.map(data => data.cgpa || null);
+    
+    // Create the chart
+    window.studentGpaChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: semesters,
+            datasets: [
+                {
+                    label: 'SGPA',
+                    data: sgpaValues,
+                    borderColor: '#3b82f6',
+                    backgroundColor: 'rgba(59, 130, 246, 0.2)',
+                    pointBackgroundColor: '#3b82f6',
+                    pointRadius: 5,
+                    pointHoverRadius: 7,
+                    fill: false,
+                    tension: 0.1
+                },
+                {
+                    label: 'CGPA',
+                    data: cgpaValues,
+                    borderColor: '#10b981',
+                    backgroundColor: 'rgba(16, 185, 129, 0.2)',
+                    pointBackgroundColor: '#10b981',
+                    pointRadius: 5,
+                    pointHoverRadius: 7,
+                    fill: false,
+                    tension: 0.1
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'SGPA & CGPA Variation Over Semesters',
+                    font: {
+                        size: 16
+                    }
+                },
+                tooltip: {
+                    mode: 'index',
+                    intersect: false,
+                    callbacks: {
+                        label: function(context) {
+                            const value = context.raw;
+                            if (value === null) return `${context.dataset.label}: N/A`;
+                            return `${context.dataset.label}: ${value.toFixed(2)}`;
+                        }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: false,
+                    min: 0,
+                    max: 10,
+                    title: {
+                        display: true,
+                        text: 'GPA Value'
+                    }
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Semester'
+                    }
+                }
+            }
+        }
+    });
 }

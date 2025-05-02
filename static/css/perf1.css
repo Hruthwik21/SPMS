@@ -290,3 +290,23 @@ canvas {
         grid-template-columns: 1fr;
     }
 }
+
+/* Student GPA chart styles */
+#studentGpaChartContainer {
+    background-color: var(--card-bg);
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    margin-top: 2rem;
+}
+
+#studentGpaChartContainer h3 {
+    color: var(--secondary-color);
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+}
+
+#studentGpaChart {
+    width: 100%;
+    max-height: 400px;
+}
