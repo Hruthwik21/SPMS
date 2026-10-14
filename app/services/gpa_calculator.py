@@ -67,7 +67,7 @@ class GPACalculator:
         for sem in semesters:
             sgpa = cls.calculate_sgpa(roll_no, sem)
             cgpa = cls.calculate_cgpa(roll_no, sem)
-            report.append({"semester": sem, "sgpa": sgpa, "cgpa": cgpa})
+            report.append({"roll_no": roll_no, "semester": sem, "sgpa": sgpa, "cgpa": cgpa})
 
         return report
 

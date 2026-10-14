@@ -37,7 +37,7 @@ def create_app(config_name=None):
     from app.routes.detail_routes import detail_bp
     from app.routes.analytics_routes import analytics_bp
 
-    app.register_blueprint(auth_bp)
+    app.register_blueprint(auth_bp, url_prefix="/api")
     app.register_blueprint(student_bp, url_prefix="/api")
     app.register_blueprint(course_bp, url_prefix="/api")
     app.register_blueprint(mark_bp, url_prefix="/api")
