@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analysis - SPMS</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">
+            <svg width="36" height="36" viewBox="0 0 80 80" fill="none">
+                <rect width="80" height="80" rx="16" fill="url(#navGrad2)"/>
+                <path d="M25 55V25l15 20 15-20v30" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+                <defs>
+                    <linearGradient id="navGrad2" x1="0" y1="0" x2="80" y2="80">
+                        <stop stop-color="#6366f1"/>
+                        <stop offset="1" stop-color="#8b5cf6"/>
+                    </linearGradient>
+                </defs>
+            </svg>
+            <span>SPMS</span>
+        </div>
+        <div class="nav-links">
+            <a href="/dashboard.html" class="nav-link">Dashboard</a>
+            <a href="/analysis.html" class="nav-link active">Analysis</a>
+        </div>
+        <div class="nav-user">
+            <span id="userDept" class="dept-badge"></span>
+            <button id="logoutBtn" class="btn btn-ghost btn-sm">Logout</button>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="page-header">
+            <h1>Performance Analysis</h1>
+            <p>Deep dive into student and course performance</p>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h3>Student GPA Trend</h3>
+                <div class="form-inline">
+                    <input type="text" id="rollNoInput" placeholder="Enter Roll No" class="input-sm">
+                    <button id="searchStudentBtn" class="btn btn-primary btn-sm">Search</button>
+                </div>
+            </div>
+            <div id="studentInfo" class="student-info" style="display:none;"></div>
+            <div class="chart-container chart-container-wide">
+                <canvas id="gpaTrendChart"></canvas>
+            </div>
+        </div>
+
+        <div class="dashboard-grid">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Course Performance</h3>
+                    <select id="courseSelect" class="select-sm"></select>
+                </div>
+                <div id="courseStats" class="course-stats" style="display:none;"></div>
+                <div class="chart-container">
+                    <canvas id="gradeDistChart"></canvas>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <h3>SGPA vs CGPA Comparison</h3>
+                </div>
+                <div class="chart-container">
+                    <canvas id="sgpaCgpaChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h3>All Students - SGPA/CGPA Overview</h3>
+            </div>
+            <div class="table-container">
+                <table class="data-table" id="gpaTable">
+                    <thead>
+                        <tr>
+                            <th>Roll No</th>
+                            <th>Name</th>
+                            <th>Department</th>
+                            <th>Semester</th>
+                            <th>SGPA</th>
+                            <th>CGPA</th>
+                        </tr>
+                    </thead>
+                    <tbody id="gpaTbody">
+                        <tr><td colspan="6" class="empty-cell">Loading...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <script src="{{ url_for('static', filename='js/api.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/analysis.js') }}"></script>
+</body>
+</html>
