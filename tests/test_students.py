@@ -48,4 +48,4 @@ def test_delete_student_admin(client, auth_headers):
 
 def test_delete_student_dept_forbidden(client, cs_headers):
     res = client.delete("/api/students/201", headers=cs_headers)
-    assert res.status_code == 404
+    assert res.status_code == 403

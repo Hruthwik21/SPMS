@@ -70,4 +70,8 @@ def _seed_test_data():
         StudentDetail(roll_no="101", course_code="MA101", semester=1, academic_year="2024-25", grade="B"),
         StudentDetail(roll_no="102", course_code="CS101", semester=1, academic_year="2024-25", grade="C"),
     ])
+    _db.session.add_all([
+        SgpaCgpaTracker(roll_no="101", semester=1, academic_year="2024-25"),
+        SgpaCgpaTracker(roll_no="102", semester=1, academic_year="2024-25"),
+    ])
     _db.session.commit()
