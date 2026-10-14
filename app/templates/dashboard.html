@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - SPMS</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">
+            <svg width="36" height="36" viewBox="0 0 80 80" fill="none">
+                <rect width="80" height="80" rx="16" fill="url(#navGrad)"/>
+                <path d="M25 55V25l15 20 15-20v30" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+                <defs>
+                    <linearGradient id="navGrad" x1="0" y1="0" x2="80" y2="80">
+                        <stop stop-color="#6366f1"/>
+                        <stop offset="1" stop-color="#8b5cf6"/>
+                    </linearGradient>
+                </defs>
+            </svg>
+            <span>SPMS</span>
+        </div>
+        <div class="nav-links">
+            <a href="/dashboard.html" class="nav-link active">Dashboard</a>
+            <a href="/analysis.html" class="nav-link">Analysis</a>
+        </div>
+        <div class="nav-user">
+            <span id="userDept" class="dept-badge"></span>
+            <button id="logoutBtn" class="btn btn-ghost btn-sm">Logout</button>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="page-header">
+            <h1>Dashboard</h1>
+            <p>Overview of student performance metrics</p>
+        </div>
+
+        <div class="stats-grid" id="statsGrid">
+            <div class="stat-card loading"><div class="stat-skeleton"></div></div>
+            <div class="stat-card loading"><div class="stat-skeleton"></div></div>
+            <div class="stat-card loading"><div class="stat-skeleton"></div></div>
+            <div class="stat-card loading"><div class="stat-skeleton"></div></div>
+        </div>
+
+        <div class="dashboard-grid">
+            <div class="card chart-card">
+                <div class="card-header">
+                    <h3>Department Distribution</h3>
+                </div>
+                <div class="chart-container">
+                    <canvas id="deptChart"></canvas>
+                </div>
+            </div>
+            <div class="card chart-card">
+                <div class="card-header">
+                    <h3>Pass Percentage by Department</h3>
+                </div>
+                <div class="chart-container">
+                    <canvas id="passChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h3>CGPA Statistics by Department</h3>
+            </div>
+            <div class="chart-container chart-container-wide">
+                <canvas id="cgpaChart"></canvas>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h3>Recent Grade Entries</h3>
+            </div>
+            <div class="table-container">
+                <table class="data-table" id="recentTable">
+                    <thead>
+                        <tr>
+                            <th>Roll No</th>
+                            <th>Name</th>
+                            <th>Course</th>
+                            <th>Semester</th>
+                            <th>Grade</th>
+                        </tr>
+                    </thead>
+                    <tbody id="recentTbody">
+                        <tr><td colspan="5" class="empty-cell">Loading...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <script src="{{ url_for('static', filename='js/api.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+</body>
+</html>
