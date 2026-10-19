@@ -1,6 +1,6 @@
 import pytest
 from app import create_app, db as _db
-from app.models import User, Student, Course, StudentDetail, Mark, GradePoint, SgpaCgpaTracker
+from app.models import User, Student, Course, StudentDetail, GradePoint, SgpaCgpaTracker
 from werkzeug.security import generate_password_hash
 
 
