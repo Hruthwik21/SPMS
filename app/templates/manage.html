@@ -37,68 +37,87 @@
     <main class="main-content">
         <div class="page-header">
             <h1>Manage Data</h1>
-            <p>Add, edit, or remove students, marks, grades, and courses</p>
+            <p>Add student profiles, manage courses, and view all records</p>
         </div>
 
         <div class="tabs">
-            <button class="tab active" data-tab="students">Students</button>
-            <button class="tab" data-tab="marks">Marks</button>
-            <button class="tab" data-tab="grades">Grades</button>
+            <button class="tab active" data-tab="profile">Add Student Profile</button>
+            <button class="tab" data-tab="students">Students</button>
             <button class="tab" data-tab="courses">Courses</button>
+            <button class="tab" data-tab="records">All Records</button>
+        </div>
+
+        <!-- Add Student Profile Tab -->
+        <div class="tab-content active" id="tab-profile">
+            <form id="profileForm">
+                <div class="card">
+                    <div class="card-header"><h3>Student Information</h3></div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Roll Number *</label>
+                            <input type="text" name="roll_no" id="pf_roll_no" placeholder="e.g. 101" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Full Name *</label>
+                            <input type="text" name="name" id="pf_name" placeholder="e.g. John Doe" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Department *</label>
+                            <select name="department" id="pf_dept" required>
+                                <option value="">Select...</option>
+                                <option value="CSE">CSE</option>
+                                <option value="ME">ME</option>
+                                <option value="EE">EE</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Academic Year *</label>
+                            <input type="text" name="academic_year" id="pf_year" placeholder="e.g. 2024-25" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Course Enrollment & Grades</h3>
+                        <button type="button" class="btn btn-primary btn-sm" id="addCourseRow">+ Add Course</button>
+                    </div>
+                    <div class="table-container">
+                        <table class="data-table" id="enrollTable">
+                            <thead>
+                                <tr>
+                                    <th>Course</th>
+                                    <th>Semester</th>
+                                    <th>Grade</th>
+                                    <th>Minor-1</th>
+                                    <th>Mid</th>
+                                    <th>Minor-2</th>
+                                    <th>End Sem</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="enrollTbody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary" id="submitProfile">Create Student Profile</button>
+                </div>
+            </form>
         </div>
 
         <!-- Students Tab -->
-        <div class="tab-content active" id="tab-students">
+        <div class="tab-content" id="tab-students">
             <div class="card">
                 <div class="card-header">
-                    <h3>Students</h3>
-                    <div class="form-inline">
-                        <input type="text" id="studentFilter" placeholder="Filter..." class="input-sm">
-                        <button class="btn btn-primary btn-sm" onclick="openModal('student')">+ Add Student</button>
-                    </div>
+                    <h3>All Students</h3>
+                    <input type="text" id="studentFilter" placeholder="Filter..." class="input-sm">
                 </div>
                 <div class="table-container">
                     <table class="data-table">
-                        <thead>
-                            <tr><th>Roll No</th><th>Name</th><th>Department</th><th>Actions</th></tr>
-                        </thead>
+                        <thead><tr><th>Roll No</th><th>Name</th><th>Department</th><th>Actions</th></tr></thead>
                         <tbody id="studentsTbody"><tr><td colspan="4" class="empty-cell">Loading...</td></tr></tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <!-- Marks Tab -->
-        <div class="tab-content" id="tab-marks">
-            <div class="card">
-                <div class="card-header">
-                    <h3>Marks</h3>
-                    <button class="btn btn-primary btn-sm" onclick="openModal('mark')">+ Add Marks</button>
-                </div>
-                <div class="table-container">
-                    <table class="data-table">
-                        <thead>
-                            <tr><th>Roll No</th><th>Course</th><th>Minor-1</th><th>Mid</th><th>Minor-2</th><th>End Sem</th><th>Actions</th></tr>
-                        </thead>
-                        <tbody id="marksTbody"><tr><td colspan="7" class="empty-cell">Loading...</td></tr></tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <!-- Grades Tab -->
-        <div class="tab-content" id="tab-grades">
-            <div class="card">
-                <div class="card-header">
-                    <h3>Student Grades</h3>
-                    <button class="btn btn-primary btn-sm" onclick="openModal('grade')">+ Add Grade</button>
-                </div>
-                <div class="table-container">
-                    <table class="data-table">
-                        <thead>
-                            <tr><th>Roll No</th><th>Name</th><th>Course</th><th>Semester</th><th>Year</th><th>Grade</th><th>Actions</th></tr>
-                        </thead>
-                        <tbody id="gradesTbody"><tr><td colspan="7" class="empty-cell">Loading...</td></tr></tbody>
                     </table>
                 </div>
             </div>
@@ -109,25 +128,48 @@
             <div class="card">
                 <div class="card-header">
                     <h3>Courses</h3>
-                    <button class="btn btn-primary btn-sm" onclick="openModal('course')">+ Add Course</button>
+                    <button class="btn btn-primary btn-sm" onclick="openCourseModal()">+ Add Course</button>
+                </div>
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead><tr><th>Code</th><th>Name</th><th>Credits</th><th>Actions</th></tr></thead>
+                        <tbody id="coursesTbody"><tr><td colspan="4" class="empty-cell">Loading...</td></tr></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- All Records Tab -->
+        <div class="tab-content" id="tab-records">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Grades & Marks Records</h3>
+                    <select id="recordFilter" class="select-sm" onchange="renderRecords()">
+                        <option value="all">All Records</option>
+                        <option value="grades">Grades Only</option>
+                        <option value="marks">Marks Only</option>
+                    </select>
                 </div>
                 <div class="table-container">
                     <table class="data-table">
                         <thead>
-                            <tr><th>Code</th><th>Name</th><th>Credits</th><th>Actions</th></tr>
+                            <tr>
+                                <th>Roll No</th><th>Name</th><th>Course</th><th>Semester</th><th>Year</th>
+                                <th>Grade</th><th>M1</th><th>Mid</th><th>M2</th><th>End</th>
+                            </tr>
                         </thead>
-                        <tbody id="coursesTbody"><tr><td colspan="4" class="empty-cell">Loading...</td></tr></tbody>
+                        <tbody id="recordsTbody"><tr><td colspan="10" class="empty-cell">Loading...</td></tr></tbody>
                     </table>
                 </div>
             </div>
         </div>
     </main>
 
-    <!-- Modal -->
+    <!-- Course Modal -->
     <div class="modal-overlay" id="modalOverlay">
         <div class="modal">
             <div class="modal-header">
-                <h3 id="modalTitle">Add</h3>
+                <h3 id="modalTitle">Add Course</h3>
                 <button class="modal-close" onclick="closeModal()">&times;</button>
             </div>
             <form id="modalForm" class="modal-form"></form>
