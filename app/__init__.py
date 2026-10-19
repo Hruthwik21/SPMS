@@ -86,25 +86,28 @@ def create_app(config_name=None):
 
 
 def _seed_initial_data(User, GradePoint, Course):
-    if User.query.count() == 0:
-        from werkzeug.security import generate_password_hash
+    from werkzeug.security import generate_password_hash
 
-        users = [
-            User(username="admin", email="admin@spms.edu",
-                 password_hash=generate_password_hash("admin123"),
-                 department="ALL"),
-            User(username="cs_dept", email="cs@spms.edu",
-                 password_hash=generate_password_hash("cs123"),
-                 department="CSE"),
-            User(username="me_dept", email="me@spms.edu",
-                 password_hash=generate_password_hash("me123"),
-                 department="ME"),
-            User(username="ee_dept", email="ee@spms.edu",
-                 password_hash=generate_password_hash("ee123"),
-                 department="EE"),
-        ]
-        for u in users:
-            db.session.add(u)
+    default_users = [
+        {"username": "admin", "email": "admin@spms.edu", "password": "admin123", "department": "ALL"},
+        {"username": "cs_dept", "email": "cs@spms.edu", "password": "cs123", "department": "CSE"},
+        {"username": "me_dept", "email": "me@spms.edu", "password": "me123", "department": "ME"},
+        {"username": "ee_dept", "email": "ee@spms.edu", "password": "ee123", "department": "EE"},
+    ]
+
+    for user_data in default_users:
+        existing_user = User.query.filter(
+            (User.username == user_data["username"]) | (User.email == user_data["email"])
+        ).first()
+
+        if not existing_user:
+            new_user = User(
+                username=user_data["username"],
+                email=user_data["email"],
+                password_hash=generate_password_hash(user_data["password"]),
+                department=user_data["department"],
+            )
+            db.session.add(new_user)
 
     if GradePoint.query.count() == 0:
         grade_points = [
