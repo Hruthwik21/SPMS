@@ -71,6 +71,11 @@ def create_app(config_name=None):
         from flask import render_template
         return render_template("analysis.html")
 
+    @app.route("/manage.html")
+    def manage_page():
+        from flask import render_template
+        return render_template("manage.html")
+
     @app.errorhandler(404)
     def not_found(_):
         from flask import jsonify
