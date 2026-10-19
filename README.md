@@ -2,6 +2,19 @@
 
 A full-stack web application for managing, tracking, and analyzing student academic performance across departments. Built with Flask, SQLAlchemy, and a modern vanilla JS frontend with Chart.js visualizations.
 
+## Live Demo
+
+**https://spms-kujp.onrender.com**
+
+Login credentials:
+
+| Role | Username | Password |
+|------|----------|----------|
+| Admin | `admin` | `admin123` |
+| CSE Dept | `cs_dept` | `cs123` |
+| ME Dept | `me_dept` | `me123` |
+| EE Dept | `ee_dept` | `ee123` |
+
 ## Features
 
 - **JWT Authentication** - Secure token-based auth with role-based access control
